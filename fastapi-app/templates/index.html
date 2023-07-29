@@ -5,10 +5,9 @@
         <meta charset="utf-8"/>
     </head>
     <body>
-        <h1>おおおお一覧</h1>
-        <ul>
-            <li>アイス</li>
-            <li>ケーキ</li>
-            <li>パフェ</li>
+        <h1>一覧</h1>
+        {% for user in user_list %}
+            <li>ID: {{ user["ID"] }}&nbsp;名前:{{ user["Name"] }}&nbsp;クラス:{{ user["Class"] }}</li>
+        {% endfor %}
     </body>
 </html>
