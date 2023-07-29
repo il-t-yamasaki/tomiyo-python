@@ -1,0 +1,12 @@
+pytube
+opencv-python-headless
+youtube_dl
+ffmpeg-python
+pillow
+matplotlib
+streamlit
+streamlit_webrtc
+spleeter
+pathlib
+typing
+click
