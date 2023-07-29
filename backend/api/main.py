@@ -3,6 +3,7 @@ from fastapi.security.api_key import APIKeyHeader, APIKey
 from starlette.status import HTTP_403_FORBIDDEN
 
 from routers import test
+from routers import api
 from util import util
 
 correct_key: str = util.get_apikey()
@@ -20,6 +21,7 @@ async def get_api_key(
 
 app = FastAPI()
 app.include_router(test.router, dependencies=[Depends(get_api_key)], tags=["Test"])
+app.include_router(api.router, dependencies=[Depends(get_api_key)], tags=["Api"])
 
 @app.get("/")
 def read_root():
