@@ -4,6 +4,8 @@ WORKDIR /app
 RUN mkdir src
 
 COPY requirements.txt .
+COPY main.py .
+COPY src/ src/
 
 RUN apt-get update && \
     apt-get -y upgrade && \
@@ -14,7 +16,6 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8080
 
-COPY src/ src/
-CMD streamlit run src/main.py \
+CMD streamlit run main.py \
     --browser.serverAddress="0.0.0.0" \
     --server.port="8080"

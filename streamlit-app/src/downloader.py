@@ -1,7 +1,7 @@
 from pytube import YouTube
 
 
-def download_movie(url:str):
+def download_movie(url:str) -> str:
     # 動画のメタデータ
     yt = YouTube(url)
 
@@ -13,21 +13,12 @@ def download_movie(url:str):
         print(element)
 
     # ダウンロードするタイプ
-    movie_loc = "Youtube" # ["Youtube", "Upload"]
     resolution = "720p" # ["720p", "better mp4"]
-
-    if movie_loc == "Youtube":
-        title = str(yt.title)
-        # ドライブにダウンロード
-        if resolution == 'better mp4':
-            # mp4の時
-            yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
-        else:
-            # mp4の時
-            yt.streams.filter(resolution=resolution).first().download()
-    elif movie_loc == "Upload":
-        title = ""
-        if ".mp4" in title:
-            title = title.replace(".mp4", "")
+    if resolution == 'better mp4':
+        # mp4の時
+        yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+    else:
+        # mp4の時
+        yt.streams.filter(resolution=resolution).first().download()
     
     return title
