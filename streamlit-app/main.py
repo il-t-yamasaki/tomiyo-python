@@ -8,13 +8,14 @@ from src import downloader, predictor
 
 st.title("動画からバイクの画像を切り抜いて表示するアプリ")
 
-# 以下をサイドバーに表示
+# サイドバー表示
 url = st.sidebar.text_input("Youtubeの動画のURLを入力してください")
 if st.sidebar.button(label="ダウンロード"):
     if url:
         title = downloader.download_movie(url)
         st.sidebar.text(f"{title} がダウンロードされました")
 
+# 検出実行時
 if st.button(label="検出！"):
     app_state = st.empty()
     movie_title = st.empty()
@@ -24,11 +25,12 @@ if st.button(label="検出！"):
     cwd = os.getcwd()
     movie_path = glob.glob(f"{cwd}/*.mp4")[0]
 
-    #@title バイク検出実行 対向車線のみから取得する場合はTrueにする
+    #@title バイク検出実行
     app_state.write("モデルダウンロード中...")
+    # 対向車線のみから取得する場合はTrueにする
     only_oncoming_lane = "True"
-    model, cap, fps, threshold = predictor.pre_load(movie_path=movie_path,
-                                                    threshold=0.6)
+    threshold = 0.6
+    model, cap, fps = predictor.pre_load(movie_path=movie_path)
     print(movie_path , fps)
     print(model)
     app_state.write('モデル準備完了！')

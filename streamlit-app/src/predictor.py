@@ -21,8 +21,8 @@ transform = T.Compose(
                 ]
             )
     
-# 検知処理
-def pre_load(movie_path:str, threshold:float=0.5):
+# モデル・動画読み込み
+def pre_load(movie_path:str):
     # DETRのモデルを読み込む
     model = DetectorModel()
 
@@ -32,13 +32,13 @@ def pre_load(movie_path:str, threshold:float=0.5):
     # 動画のFPSを取得する
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    return model, cap, fps, threshold
+    return model, cap, fps
 
 # バイクの検出を実行する
 def detect_bike(model: DetectorModel,
-                frame,
-                only_oncoming_lane,
-                threshold) -> Union[np.ndarray, None]:
+                frame: np.ndarray,
+                only_oncoming_lane: str,
+                threshold: float) -> Union[np.ndarray, None]:
 
     # フレームを右半分にする
     if only_oncoming_lane == "True":
