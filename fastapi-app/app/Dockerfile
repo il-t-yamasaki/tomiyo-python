@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get install -y git
 
 RUN pip install -r requirements.txt
+RUN pip install mysql-connector-python
 
-EXPOSE 80
-
-CMD ["uvicorn", "app:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
+#EXPOSE 80
+#CMD ["uvicorn", "app:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
