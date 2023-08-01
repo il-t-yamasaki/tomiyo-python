@@ -4,9 +4,6 @@ WORKDIR /app
 RUN mkdir src
 
 COPY requirements.txt .
-COPY app.py .
-COPY src/ src/
-COPY templates/ templates/
 
 RUN apt-get update && \
     apt-get -y upgrade && \
