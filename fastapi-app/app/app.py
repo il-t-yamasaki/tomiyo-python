@@ -5,7 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 #from fastapi.staticfiles import StaticFiles
 
 from src.model import Item
-
+from bs4 import BeautifulSoup
+import urllib.request
+import re
 
 app = FastAPI()
 
@@ -41,3 +43,36 @@ async def root(request: Request):
 async def users(user: Item):
     User_list.append({"ID": user.ID,"Name":user.Name,"Class":user.Class})
     return User_list
+
+
+
+# スクレイピング処理べた書き
+#対象のサイトURL
+url = "https://www.2ch.sc/bbsmenu.html"
+
+#URLリソースを開く
+res = urllib.request.urlopen(url)
+
+#インスタンスの作成
+soup = BeautifulSoup(res, 'html5lib')
+
+#head内のタイトルタグを取得
+site_title = soup.html.head.title
+# print(site_title.string)
+
+
+#「ニュース」を含むaタグ全部
+body_href = soup.find_all("b", text=re.compile(""))
+# print(body_href)
+#[<a href="http://ai.2ch.sc/newsalpha/">ニュース速報α</a>, <a href="http://ai.2ch.sc/newsalpha/">ニュース速報α</a>,...]
+
+
+@app.get("/search/")
+async def search(request: Request):
+    return templates.TemplateResponse(
+        "search.html", 
+        {
+            "request": request,
+            "result": body_href
+        }
+    )

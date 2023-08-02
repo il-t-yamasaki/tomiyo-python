@@ -6,8 +6,8 @@
     </head>
     <body>
         <h1>一覧</h1>
-        {% for user in user_list %}
-            <li>ID: {{ user["ID"] }}&nbsp;なまえ:{{ user["Name"] }}&nbsp;クラス:{{ user["Class"] }}</li>
+        {% for row in result %}
+            <li>{{row}}</li>
         {% endfor %}
     </body>
 </html>
