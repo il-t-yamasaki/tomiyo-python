@@ -7,5 +7,5 @@ install:
 
 # run flask app
 run-flask-app:
-	docker image build -t flask-app flask-app/.
-	docker run -d -p 8000:8080 flask-app
+	docker image build -t flask-app flask-app/app/.
+	docker run -d -p 8000:8080 -v ./flask-app/app:/app flask-app

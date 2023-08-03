@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  flask-app:
+    build: ./app
+    ports:
+      - 8000:8080 
+    volumes:
+      - ./app:/app
+    command: gunicorn app:app -b 0.0.0.0:8080
