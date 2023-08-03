@@ -1,13 +1,12 @@
-import cv2
 import numpy as np
 from PIL import Image
-from typing import Union
 import torch
 import torchvision.transforms as T
 torch.set_grad_enabled(False)
 
-from src.model import DetectorModel, ImageTransformer
+from src.model import DetectorModel
 from src.utils import rescale_bboxes
+from src.postprocess import post_process
 
 
 # 画像前処理器をロード
@@ -20,25 +19,12 @@ transform = T.Compose(
                     T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ]
             )
-    
-# モデル・動画読み込み
-def pre_load(movie_path:str):
-    # DETRのモデルを読み込む
-    model = DetectorModel()
-
-    # ダウンロードした動画を読み込む
-    cap = cv2.VideoCapture(movie_path)
-
-    # 動画のFPSを取得する
-    fps = cap.get(cv2.CAP_PROP_FPS)
-
-    return model, cap, fps
 
 # バイクの検出を実行する
 def detect_bike(model: DetectorModel,
                 frame: np.ndarray,
                 only_oncoming_lane: str,
-                threshold: float) -> Union[np.ndarray, None]:
+                threshold: float) -> dict:
 
     # フレームを右半分にする
     if only_oncoming_lane == "True":
@@ -56,32 +42,7 @@ def detect_bike(model: DetectorModel,
 
     # bboxのスケールをもとの画像サイズに変換
     results = rescale_bboxes(outputs['pred_boxes'][0, keep], pil_image.size)
-
-    # バイクの座標と検出された確信度を取得する
-    bike_count = 0
-    bike_imgs = {}
-    for (xmin, ymin, xmax, ymax), p in zip(results, probas[keep]):
-        x1 = int(xmin)
-        y1 = int(ymin)
-        x2 = int(xmax)
-        y2 = int(ymax)
-        cl = p.argmax()
-        score = p[cl]
-        # 閾値以上のバイクだけ
-        if cl != 4 or score < threshold:
-            continue
-        bike_count += 1
-
-        # bikeの画像を切り出す
-        #x1, y1 = max(0, x1), max(0, y1)
-        #x2, y2 = min(frame.shape[1], x2), min(frame.shape[0], y2)
-        bike_img = frame[y1:y2, x1:x2]
-        resized_bike_img = cv2.resize(bike_img, dsize=None, fx=2.0, fy=2.0)
-
-        bike_imgs[f"{bike_count}"] = resized_bike_img
-        print(f'Bike {bike_count}: ({x1}, {y1}), ({x2}, {y2})')
-
-    if bike_count:
-        return bike_imgs
-    else:
-        return None
+    
+    # リザルトからバイク画像を抽出
+    bike_imgs = post_process(results, probas[keep], threshold, frame)
+    return bike_imgs

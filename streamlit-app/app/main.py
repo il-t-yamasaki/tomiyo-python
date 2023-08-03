@@ -3,7 +3,7 @@ import os
 
 import streamlit as st
 
-from src import downloader, predictor
+from src import downloader, predictor, preprocess
 
 
 st.title("動画からバイクの画像を切り抜いて表示するアプリ")
@@ -22,17 +22,18 @@ if st.button(label="検出！"):
     time_st = st.empty()
     image_loc = st.empty()
 
-    cwd = os.getcwd()
-    movie_path = glob.glob(f"{cwd}/*.mp4")[0]
-
-    #@title バイク検出実行
-    app_state.write("モデルダウンロード中...")
     # 対向車線のみから取得する場合はTrueにする
     only_oncoming_lane = "True"
     threshold = 0.6
-    model, cap, fps = predictor.pre_load(movie_path=movie_path)
-    print(movie_path , fps)
-    print(model)
+
+    # TODO: ちゃんと意図した動画を読み込むようにする
+    cwd = os.getcwd()
+    movie_path = glob.glob(f"{cwd}/*.mp4")[0]
+
+    app_state.write("モデルダウンロード中...")
+    # 前処理
+    model = preprocess.model_loader()
+    cap, fps = preprocess.capture_loader(movie_path)
     app_state.write('モデル準備完了！')
     movie_title.write(f"動画のタイトル：{os.path.basename(movie_path)}")
 
