@@ -4,10 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 #from fastapi.responses import HTMLResponse
 #from fastapi.staticfiles import StaticFiles
 
-from src.model import Item
-from bs4 import BeautifulSoup
-import urllib.request
-import re
+from src.scrap import scraper
 
 app = FastAPI()
 
@@ -20,13 +17,6 @@ app.add_middleware(
 )
 
 templates = Jinja2Templates(directory="templates")
-
-def scraper(URL,keyword):
-    url = URL
-    res = urllib.request.urlopen(url)
-    soup = BeautifulSoup(res, 'html5lib')
-    body_href = soup.find_all("a", text=re.compile(keyword))
-    return body_href
 
 
 @app.get("/search/")
