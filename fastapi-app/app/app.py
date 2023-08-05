@@ -21,7 +21,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get(path="/api/users")
 async def get_list_user():
-    result = handler_db.select_all_user()
+    result = database.handler_db.select_all_user()
     return {
         "status": "OK",
         "data": result
