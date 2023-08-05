@@ -7,7 +7,8 @@ COPY requirements.txt .
 
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y git
+    apt-get install -y git && \
+    apt-get -y install gcc libmariadb-dev
 
 RUN pip install -r requirements.txt
 RUN pip install mysql-connector-python

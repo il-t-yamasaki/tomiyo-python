@@ -6,3 +6,5 @@ Werkzeug
 requests
 beautifulsoup4
 html5lib
+mysqlclient==2.1.0
+sqlalchemy
