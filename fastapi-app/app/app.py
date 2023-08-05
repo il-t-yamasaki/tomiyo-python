@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 #from fastapi.staticfiles import StaticFiles
 
 from src.scrap import scraper
+import database.handler_db
 
 app = FastAPI()
 
@@ -18,6 +19,13 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory="templates")
 
+@app.get(path="/api/users")
+async def get_list_user():
+    result = handler_db.select_all_user()
+    return {
+        "status": "OK",
+        "data": result
+    }
 
 @app.get("/search/")
 async def search(request: Request, URL: str, keyword: str):

@@ -1,14 +1,12 @@
 # -*- encoding: utf-8 -*-
 import sys
-import models
-import databases
+from . import models
+from . import databases
 
 sys.dont_write_bytecode = True
 def select_all_user():
     session = databases.create_new_session()
-    user_list = session.query(models.user).\
-            filter(models.user.status == 'created').\
-            all()
+    user_list = session.query(models.user).all()
     if user_list == None:
         user_list = []
     return user_list
