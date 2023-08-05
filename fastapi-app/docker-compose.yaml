@@ -1,4 +1,5 @@
-version: '3'
+networks:
+  tomiyo-network: {}
 
 services:
   app:
@@ -11,6 +12,9 @@ services:
       - ./app:/app
     links:
       - db
+    networks:
+      - tomiyo-network
+
   frontend:
     build: ./frontend/
     volumes:
@@ -18,9 +22,13 @@ services:
     command: sh -c "cd react-project && yarn start" #コンテナを立ち上げたときに自動的にbuildする
     ports:
       - "3000:3000"
+    networks:
+      - tomiyo-network
     tty: true
+
   db:
     image: mysql:5.7
+    container_name: tomiyo-db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: 'fastapi'
@@ -28,9 +36,23 @@ services:
       MYSQL_DATABASE: 'fastapi'
     ports:
       - 3306:3306
+    networks:
+      - tomiyo-network
     volumes:
-      - db:/var/lib/mysql
-  
-volumes:
-  db:
-    driver: local
+      - ./db/data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DESIGN: pappu687
+      ADMINER_DEFAULT_SERVER: tomiyo-db
+      TZ: ${TZ-Asia/Tokyo}
+    networks:
+      - tomiyo-network
+    depends_on:
+      - db
