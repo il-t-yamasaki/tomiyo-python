@@ -1,0 +1,12 @@
+pytube==15.0.0
+opencv-python-headless== 4.8.0.74
+youtube_dl==2021.12.17
+ffmpeg-python==0.2.0
+pillow==9.3.0
+matplotlib==3.7.2
+streamlit==1.25.0
+#streamlit_webrtc
+spleeter==2.4.0
+pathlib==1.0.1
+typing==3.7.4.3
+click==7.1.2
