@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+Jinja2
+MarkupSafe
+Werkzeug
+requests
+beautifulsoup4
+html5lib

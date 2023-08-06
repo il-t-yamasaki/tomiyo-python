@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>あああああ</title>
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        <h1>一覧</h1>
+        {% for user in user_list %}
+            <li>ID: {{ user["ID"] }}&nbsp;なまえ:{{ user["Name"] }}&nbsp;クラス:{{ user["Class"] }}</li>
+        {% endfor %}
+    </body>
+</html>
